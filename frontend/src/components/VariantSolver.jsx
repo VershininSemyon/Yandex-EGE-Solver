@@ -20,7 +20,6 @@ const VariantSolver = () => {
                 const errData = await response.json().catch(() => ({}));
                 let errorMsg = 'Не удалось получить вариант';
                 if (errData.detail) {
-                    // Обработка ошибок валидации FastAPI (422)
                     errorMsg = Array.isArray(errData.detail) 
                         ? errData.detail.map(e => e.msg).join(', ') 
                         : errData.detail;
@@ -39,7 +38,7 @@ const VariantSolver = () => {
     return (
         <Card className="fade-in">
             <h2>Поиск и решение варианта</h2>
-            <p className="text-muted">Введите ID варианта, чтобы получить готовые ответы на все задания.</p>
+            <p className="text-muted">Вставьте ссылку на вариант, чтобы получить готовые ответы на все задания.</p>
             
             <form onSubmit={handleSubmit} className="form">
                 <Input
