@@ -13,7 +13,7 @@ function App() {
                 <h1 className="app-title">
                     <span className="icon">🎓</span> Yandex EGE Solver
                 </h1>
-                <p className="app-subtitle">Инструмент для подготовки к экзаменам</p>
+                <p className="app-subtitle">Авторешение вариантов Yandex EGE и загрузка банка задач по номеру в JSON файл</p>
             </header>
 
             <nav className="tabs">
