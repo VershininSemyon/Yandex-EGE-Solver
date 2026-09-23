@@ -1,9 +1,7 @@
-
 import io
 import json
-import re
 from dataclasses import asdict
-from urllib.parse import parse_qs, urlparse
+from uuid import UUID
 
 import uvicorn
 from api.config import settings
@@ -28,54 +26,8 @@ if settings.CORS_ORIGINS:
     )
 
 
-def extract_variant_id(value: str) -> str | None:
-    """Извлекает ID варианта из строки, UUID или полной ссылки."""
-    value = value.strip()
-
-    if not value:
-        return None
-
-    if not value.startswith(("http://", "https://")):
-        return value
-
-    parsed_url = urlparse(value)
-    query_params = parse_qs(parsed_url.query)
-
-    for key in ("variant_id", "variantId", "id"):
-        values = query_params.get(key)
-        if values and values[0].strip():
-            return values[0].strip()
-
-    uuid_match = re.search(
-        r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-"
-        r"[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}",
-        value,
-    )
-
-    if uuid_match:
-        return uuid_match.group(0)
-
-    path_parts = [part for part in parsed_url.path.split("/") if part]
-
-    if path_parts:
-        candidate = path_parts[-1].strip()
-
-        if candidate and candidate not in {"variant", "variants"}:
-            return candidate
-
-    return None
-
-
-@app.get("/variants/{variant_id:path}")
-async def get_variant(variant_id: str):
-    extracted_id = extract_variant_id(variant_id)
-
-    if not extracted_id:
-        raise HTTPException(
-            status_code=400, 
-            detail="Не удалось определить ID варианта. Отправьте валидный UUID или прямую ссылку."
-        )
-
+@app.get("/variants/{variant_id}")
+async def get_variant(variant_id: UUID):
     config = Config()
     client = YandexClient(config)
 
@@ -84,7 +36,7 @@ async def get_variant(variant_id: str):
         parser = VariantParser()
         service = VariantSolverService(fetcher=fetcher, parser=parser)
 
-        variant = await service.solve(extracted_id)
+        variant = await service.solve(str(variant_id))
 
         return {
             "variant_id": variant.variant_id,
@@ -98,7 +50,7 @@ async def get_variant(variant_id: str):
             ],
         }
     except Exception as err:
-        raise HTTPException(status_code=400, detail="Неверный id варианта или ошибка при получении данных")
+        raise HTTPException(status_code=400, detail="Неверный id варианта")
     finally:
         await client.close()
 

@@ -21,6 +21,7 @@ const TasksDownloader = () => {
                 throw new Error(errData.detail || 'Не удалось загрузить задания');
             }
 
+            // Скачивание файла через Blob
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
