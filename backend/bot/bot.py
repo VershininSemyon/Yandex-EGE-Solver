@@ -11,7 +11,7 @@ from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import BufferedInputFile, Message
+from aiogram.types import BotCommand, BufferedInputFile, Message
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from src.fetchers import KompegeFetcher, YandexTaskFetcher
 from src.http import KompegeClient, YandexClient
@@ -413,25 +413,25 @@ async def main() -> None:
 
         await bot.set_my_commands(
             [
-                (
-                    "start",
-                    "О боте и доступных возможностях",
+                BotCommand(
+                    command="start",
+                    description="О боте и доступных возможностях",
                 ),
-                (
-                    "solve-yandex-variant",
-                    "Решить вариант Яндекса",
+                BotCommand(
+                    command="solve-yandex-variant",
+                    description="Решить вариант Яндекса",
                 ),
-                (
-                    "solve-kompege-variant",
-                    "Решить вариант Kompege",
+                BotCommand(
+                    command="solve-kompege-variant",
+                    description="Решить вариант Kompege",
                 ),
-                (
-                    "load-yandex-tasks",
-                    "Загрузить банк заданий",
+                BotCommand(
+                    command="load-yandex-tasks",
+                    description="Загрузить банк заданий",
                 ),
-                (
-                    "cancel",
-                    "Отменить текущую операцию",
+                BotCommand(
+                    command="cancel",
+                    description="Отменить текущую операцию",
                 ),
             ]
         )
