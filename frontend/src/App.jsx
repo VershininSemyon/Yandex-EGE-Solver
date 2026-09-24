@@ -3,6 +3,7 @@ import { useState } from 'react';
 import YandexVariantSolver from './components/YandexVariantSolver';
 import YandexTasksDownloader from './components/YandexTasksDownloader';
 import KompegeVariantSolver from './components/KompegeVariantSolver';
+import TelegramBot from './components/TelegramBot';
 import './App.css';
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
                     База заданий
                 </button>
             </nav>
+
+            <TelegramBot />
 
             <main className="content">
                 {renderContent()}
