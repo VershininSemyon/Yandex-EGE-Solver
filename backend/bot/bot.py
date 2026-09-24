@@ -146,6 +146,17 @@ async def start(message: Message, state: FSMContext) -> None:
     )
 
 
+@router.message(Command("cancel"))
+async def cancel(
+    message: Message,
+    state: FSMContext,
+) -> None:
+    await state.clear()
+    await message.answer(
+        "Текущая операция отменена."
+    )
+
+
 @router.message(Command("solve_yandex_variant"))
 async def solve_yandex_command(
     message: Message,
@@ -163,6 +174,7 @@ async def solve_yandex_command(
 @router.message(
     BotState.waiting_yandex_variant_id,
     F.text,
+    ~F.text.startswith("/"),
 )
 async def solve_yandex_variant(
     message: Message,
@@ -222,6 +234,7 @@ async def solve_kompege_command(
 @router.message(
     BotState.waiting_kompege_variant_id,
     F.text,
+    ~F.text.startswith("/"),
 )
 async def solve_kompege_variant(
     message: Message,
@@ -281,6 +294,7 @@ async def load_yandex_tasks_command(
 @router.message(
     BotState.waiting_yandex_task_number,
     F.text,
+    ~F.text.startswith("/"),
 )
 async def load_yandex_tasks(
     message: Message,
@@ -348,17 +362,6 @@ async def load_yandex_tasks(
             "Не удалось загрузить банк заданий. "
             "Попробуйте ещё раз позже."
         )
-
-
-@router.message(Command("cancel"))
-async def cancel(
-    message: Message,
-    state: FSMContext,
-) -> None:
-    await state.clear()
-    await message.answer(
-        "Текущая операция отменена."
-    )
 
 
 async def main() -> None:
