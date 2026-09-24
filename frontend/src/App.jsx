@@ -25,7 +25,7 @@ function App() {
         <div className="app-container">
             <header className="app-header">
                 <h1 className="app-title">
-                    <span className="icon">🎓</span> EGE Solver
+                    EGE Solver
                 </h1>
                 <p className="app-subtitle">
                     Авторешение вариантов и загрузка банка задач из Yandex и Kompege

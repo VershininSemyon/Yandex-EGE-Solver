@@ -44,7 +44,7 @@ const KompegeVariantSolver = () => {
 
     return (
         <Card className="fade-in">
-            <h2>📘 Решение варианта Kompege</h2>
+            <h2>Решение варианта Kompege</h2>
             <p className="text-muted">
                 Введите ID варианта с сайта Kompege, чтобы получить готовые ответы на все задания.
             </p>
