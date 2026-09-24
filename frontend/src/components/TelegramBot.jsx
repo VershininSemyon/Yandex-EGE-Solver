@@ -1,28 +1,36 @@
 
-const TelegramBot = () => {
-    return (
-        <div className="telegram-bot fade-in">
-            <div className="telegram-bot-icon">
-                <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                >
-                    <path
-                        d="M21.5 3.5 18.2 20c-.25 1.16-.9 1.45-1.83.9l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.14 9.37-8.46c.41-.36-.09-.56-.64-.2L5.36 13.54.36 11.97c-1.09-.34-1.11-1.09.23-1.59L20.12 2.84c.9-.33 1.69.2 1.38.66Z"
-                        fill="currentColor"
-                    />
-                </svg>
-            </div>
+import { Card } from './ui';
 
-            <div className="telegram-bot-content">
-                <h3>Telegram-бот EGE Solver</h3>
-                <p>
-                    Решайте варианты Yandex и Kompege и загружайте
-                    банк заданий прямо в Telegram.
-                </p>
-                <span className="telegram-bot-username">
-                    @Yandex_EGE_Inf_Solver_Bot
-                </span>
+function TelegramBot() {
+    return (
+        <Card className="telegram-bot-card fade-in">
+            <div className="telegram-bot-header">
+                <div className="telegram-bot-icon">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M21.5 3.5L18.1 20.2C17.85 21.4 17.2 21.7 16.25 21.15L10.9 17.2L8.32 19.68C8.03 19.97 7.79 20.21 7.2 20.21L7.58 14.75L17.52 5.77C17.95 5.39 17.43 5.18 16.86 5.56L4.57 13.3L-0.71 11.64C-1.86 11.28 -1.88 10.49 -0.47 9.94L20.19 1.97C21.15 1.62 21.99 2.18 21.5 3.5Z"
+                            transform="translate(1 0)"
+                            fill="currentColor"
+                        />
+                    </svg>
+                </div>
+
+                <div className="telegram-bot-info">
+                    <h2>Telegram-бот EGE Solver</h2>
+
+                    <p className="text-muted">
+                        Решайте варианты Yandex и Kompege и загружайте банк
+                        заданий прямо в Telegram.
+                    </p>
+
+                    <div className="telegram-bot-username">
+                        @Yandex_EGE_Inf_Solver_Bot
+                    </div>
+                </div>
             </div>
 
             <a
@@ -31,11 +39,10 @@ const TelegramBot = () => {
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                Открыть бота
-                <span aria-hidden="true">→</span>
+                Открыть Telegram-бота
             </a>
-        </div>
+        </Card>
     );
-};
+}
 
 export default TelegramBot;
