@@ -58,7 +58,7 @@ function App() {
             </main>
             
             <footer className="app-footer">
-                <p>© {new Date().getFullYear()} EGE Solver. Все права защищены.</p>
+                <p>© {new Date().getFullYear()} EGE Solver By SV_Vershina. Все права защищены.</p>
             </footer>
         </div>
     );
