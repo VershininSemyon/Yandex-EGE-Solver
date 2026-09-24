@@ -133,11 +133,11 @@ async def start(message: Message, state: FSMContext) -> None:
         "Бот предоставляет доступ к функциям сервиса "
         "без открытия веб-интерфейса.\n\n"
         "<b>Возможности</b>\n"
-        "/solve-yandex-variant — получить ответы "
+        "/solve_yandex_variant — получить ответы "
         "Яндекс-варианта по ID.\n"
-        "/solve-kompege-variant — получить ответы "
+        "/solve_kompege_variant — получить ответы "
         "Kompege-варианта по ID.\n"
-        "/load-yandex-tasks — загрузить банк заданий "
+        "/load_yandex_tasks — загрузить банк заданий "
         "Яндекса по номеру задания.\n\n"
         "<b>Работа с ботом</b>\n"
         "Выберите команду из меню или отправьте её сообщением. "
@@ -146,7 +146,7 @@ async def start(message: Message, state: FSMContext) -> None:
     )
 
 
-@router.message(Command("solve-yandex-variant"))
+@router.message(Command("solve_yandex_variant"))
 async def solve_yandex_command(
     message: Message,
     state: FSMContext,
@@ -203,7 +203,7 @@ async def solve_yandex_variant(
         )
 
 
-@router.message(Command("solve-kompege-variant"))
+@router.message(Command("solve_kompege_variant"))
 async def solve_kompege_command(
     message: Message,
     state: FSMContext,
@@ -262,7 +262,7 @@ async def solve_kompege_variant(
         )
 
 
-@router.message(Command("load-yandex-tasks"))
+@router.message(Command("load_yandex_tasks"))
 async def load_yandex_tasks_command(
     message: Message,
     state: FSMContext,
@@ -418,15 +418,15 @@ async def main() -> None:
                     description="О боте и доступных возможностях",
                 ),
                 BotCommand(
-                    command="solve-yandex-variant",
+                    command="solve_yandex_variant",
                     description="Решить вариант Яндекса",
                 ),
                 BotCommand(
-                    command="solve-kompege-variant",
+                    command="solve_kompege_variant",
                     description="Решить вариант Kompege",
                 ),
                 BotCommand(
-                    command="load-yandex-tasks",
+                    command="load_yandex_tasks",
                     description="Загрузить банк заданий",
                 ),
                 BotCommand(
