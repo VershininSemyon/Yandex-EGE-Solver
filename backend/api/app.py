@@ -4,15 +4,25 @@ from dataclasses import asdict
 from uuid import UUID
 
 import uvicorn
-from api.config import settings
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from src.fetchers import TaskFetcher
-from src.http import YandexClient
-from src.parsers import ExamStructureParser, TaskParser, VariantParser
-from src.services import TaskLoaderService, VariantSolverService
+from src.fetchers import KompegeFetcher, YandexTaskFetcher
+from src.http import KompegeClient, YandexClient
+from src.parsers import (
+    KompegeVariantParser,
+    YandexExamStructureParser,
+    YandexTaskParser,
+    YandexVariantParser,
+)
+from src.services import (
+    KompegeVariantSolverService,
+    YandexTaskLoaderService,
+    YandexVariantSolverService,
+)
 from src.settings import Config
+
+from api.config import settings
 
 app = FastAPI()
 
@@ -26,15 +36,15 @@ if settings.CORS_ORIGINS:
     )
 
 
-@app.get("/variants/{variant_id}")
-async def get_variant(variant_id: UUID):
+@app.get("/yandex/variants/{variant_id}")
+async def get_yandex_variant(variant_id: UUID):
     config = Config()
     client = YandexClient(config)
 
     try:
-        fetcher = TaskFetcher(client, config)
-        parser = VariantParser()
-        service = VariantSolverService(fetcher=fetcher, parser=parser)
+        fetcher = YandexTaskFetcher(client, config)
+        parser = YandexVariantParser()
+        service = YandexVariantSolverService(fetcher=fetcher, parser=parser)
 
         variant = await service.solve(str(variant_id))
 
@@ -55,16 +65,16 @@ async def get_variant(variant_id: UUID):
         await client.close()
 
 
-@app.get("/tasks/{task_id}")
-async def get_tasks_file(task_id: int):
+@app.get("/yandex/tasks/{task_id}")
+async def get_yandex_tasks_file(task_id: int):
     config = Config()
     client = YandexClient(config)
 
     try:
-        service = TaskLoaderService(
-            TaskFetcher(client, config),
-            ExamStructureParser(),
-            TaskParser(),
+        service = YandexTaskLoaderService(
+            YandexTaskFetcher(client, config),
+            YandexExamStructureParser(),
+            YandexTaskParser(),
             config,
         )
         
@@ -90,9 +100,35 @@ async def get_tasks_file(task_id: int):
         await client.close()
 
 
+@app.get("/kompege/variants/{variant_id}")
+async def get_kompege_variant(variant_id: str):
+    config = Config()
+    client = KompegeClient()
+
+    try:
+        fetcher = KompegeFetcher(client, config)
+        parser = KompegeVariantParser()
+        service = KompegeVariantSolverService(fetcher=fetcher, parser=parser)
+
+        variant = await service.solve(str(variant_id))
+
+        return {
+            "description": variant.description,
+            "tasks": [
+                {
+                    "number": i,
+                    "answers": task.key,
+                }
+                for i, task in enumerate(variant.tasks, 1)
+            ],
+        }
+    except Exception as err:
+        raise HTTPException(status_code=400, detail="Неверный id варианта")
+
+
 if __name__ == "__main__":
     uvicorn.run(
-        "api:app",
+        "app:app",
         reload=settings.UVICORN_RELOAD,
         workers=settings.UVICORN_WORKERS_COUNT
     )

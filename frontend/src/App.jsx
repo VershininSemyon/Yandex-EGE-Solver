@@ -1,27 +1,49 @@
 
 import { useState } from 'react';
-import VariantSolver from './components/VariantSolver';
-import TasksDownloader from './components/TasksDownloader';
+import YandexVariantSolver from './components/YandexVariantSolver';
+import YandexTasksDownloader from './components/YandexTasksDownloader';
+import KompegeVariantSolver from './components/KompegeVariantSolver';
 import './App.css';
 
 function App() {
-    const [activeTab, setActiveTab] = useState('variant');
+    const [activeTab, setActiveTab] = useState('yandex-variant');
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'yandex-variant':
+                return <YandexVariantSolver />;
+            case 'kompege-variant':
+                return <KompegeVariantSolver />;
+            case 'tasks':
+                return <YandexTasksDownloader />;
+            default:
+                return null;
+        }
+    };
 
     return (
         <div className="app-container">
             <header className="app-header">
                 <h1 className="app-title">
-                    <span className="icon">🎓</span> Yandex EGE Solver
+                    <span className="icon">🎓</span> EGE Solver
                 </h1>
-                <p className="app-subtitle">Авторешение вариантов Yandex EGE и загрузка банка задач по номеру в JSON файл</p>
+                <p className="app-subtitle">
+                    Авторешение вариантов и загрузка банка задач из Yandex и Kompege
+                </p>
             </header>
 
             <nav className="tabs">
                 <button 
-                    className={`tab ${activeTab === 'variant' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('variant')}
+                    className={`tab ${activeTab === 'yandex-variant' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('yandex-variant')}
                 >
-                    Решение варианта
+                    Yandex Вариант
+                </button>
+                <button 
+                    className={`tab ${activeTab === 'kompege-variant' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('kompege-variant')}
+                >
+                    Kompege Вариант
                 </button>
                 <button 
                     className={`tab ${activeTab === 'tasks' ? 'active' : ''}`}
@@ -32,11 +54,11 @@ function App() {
             </nav>
 
             <main className="content">
-                {activeTab === 'variant' ? <VariantSolver /> : <TasksDownloader />}
+                {renderContent()}
             </main>
             
             <footer className="app-footer">
-                <p>© {new Date().getFullYear()} Yandex EGE Solver. Все права защищены.</p>
+                <p>© {new Date().getFullYear()} EGE Solver. Все права защищены.</p>
             </footer>
         </div>
     );

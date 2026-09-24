@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Input, Button, Card, Alert } from './ui';
 
-const TasksDownloader = () => {
+const YandexTasksDownloader = () => {
     const [taskId, setTaskId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -15,13 +15,12 @@ const TasksDownloader = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/tasks/${taskId}`);
+            const response = await fetch(`/api/yandex/tasks/${taskId}`);
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
                 throw new Error(errData.detail || 'Не удалось загрузить задания');
             }
 
-            // Скачивание файла через Blob
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -71,4 +70,4 @@ const TasksDownloader = () => {
     );
 };
 
-export default TasksDownloader;
+export default YandexTasksDownloader;

@@ -18,10 +18,6 @@ class HttpClient(ABC):
     async def post(self, path: str, payload: list[dict]) -> dict:
         raise NotImplementedError
 
-    @abstractmethod
-    async def close(self) -> None:
-        raise NotImplementedError
-
 
 class YandexClient(HttpClient):
     def __init__(self, config: Config) -> None:
@@ -74,3 +70,13 @@ class YandexClient(HttpClient):
         async with session.post(path, json=payload, headers=headers) as response:
             response.raise_for_status()
             return await response.json()
+
+
+class KompegeClient(HttpClient):
+    async def get(self, path: str) -> dict:
+        async with aiohttp.ClientSession() as session:
+            response = await session.get(url=path)
+            return await response.json()
+
+    async def post(self, path: str, payload: list[dict]) -> dict:
+        pass

@@ -1,20 +1,23 @@
 
 from src.models import (
-    ExamTaskInfo,
-    TaskItem,
-    Variant,
-    VariantTask,
+    KompegeDifficultyLevelEnum,
+    KompegeTask,
+    KompegeVariant,
+    YandexExamTaskInfo,
+    YandexTaskItem,
+    YandexVariant,
+    YandexVariantTask,
 )
 
 
-class ExamStructureParser:
-    def parse(self, raw: dict) -> dict[int, ExamTaskInfo]:
-        result: dict[int, ExamTaskInfo] = {}
+class YandexExamStructureParser:
+    def parse(self, raw: dict) -> dict[int, YandexExamTaskInfo]:
+        result: dict[int, YandexExamTaskInfo] = {}
 
         for item in raw.get("data", []):
             number = int(item["exam_task_number"])
 
-            result[number] = ExamTaskInfo(
+            result[number] = YandexExamTaskInfo(
                 number=number,
                 skill=item.get("exam_task_tested_skill", ""),
                 category_ids=tuple(
@@ -26,11 +29,11 @@ class ExamStructureParser:
         return result
 
 
-class TaskParser:
-    def parse(self, raw: dict) -> TaskItem:
+class YandexTaskParser:
+    def parse(self, raw: dict) -> YandexTaskItem:
         markup = raw.get("markup", {})
 
-        return TaskItem(
+        return YandexTaskItem(
             task_id=raw.get("task_id", ""),
             exam_number=raw.get("number", 0),
             category=raw.get("category_title", ""),
@@ -78,22 +81,22 @@ class TaskParser:
         return answers
 
 
-class VariantParser:
-    def parse(self, raw: dict, variant_id: str) -> Variant:
-        tasks: list[VariantTask] = []
+class YandexVariantParser:
+    def parse(self, raw: dict, variant_id: str) -> YandexVariant:
+        tasks: list[YandexVariantTask] = []
 
         for number, task in enumerate(raw.get("tasks", []), start=1):
             answers = self._extract_answers(task)
 
             tasks.append(
-                VariantTask(
+                YandexVariantTask(
                     number=number,
                     task_id=task.get("task_id", ""),
                     answers=tuple(answers),
                 )
             )
 
-        return Variant(
+        return YandexVariant(
             variant_id=variant_id,
             title=raw.get("title", ""),
             tasks=tuple(tasks),
@@ -121,3 +124,48 @@ class VariantParser:
                 answers.append(str(value))
 
         return answers
+
+
+class KompegeTaskParser:
+    def parse(self, raw: dict) -> KompegeTask:
+        def text_to_html(text: str) -> str:
+            return f"""
+                <!DOCTYPE html>
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Document</title>
+                    </head>
+                    <body>
+                        {text}
+                    </body>
+                </html>
+            """
+
+        return KompegeTask(
+            system_uuid=raw.get('id'),
+            ege_number=raw.get('number'),
+            task_id=raw.get('taskId'),
+            comment=raw.get('comment'),
+            text=text_to_html(raw.get('text')),
+            key=raw.get('key'),
+            difficulty=KompegeDifficultyLevelEnum(raw.get('difficulty')),
+        )
+
+
+class KompegeVariantParser:
+    def parse(self, raw: dict) -> KompegeVariant:
+        task_parser = KompegeTaskParser()
+        description = raw.get("description", "")
+
+        tasks = [
+            task_parser.parse(task)
+            for task in raw.get("tasks", [])
+            if task.get("id") is not None
+        ]
+
+        return KompegeVariant(
+            description=description,
+            tasks=tasks
+        )

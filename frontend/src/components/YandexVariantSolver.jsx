@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Input, Button, Card } from './ui';
 
-const VariantSolver = () => {
+const YandexVariantSolver = () => {
     const [variantId, setVariantId] = useState('');
     const [variantData, setVariantData] = useState(null);
     const [error, setError] = useState('');
@@ -15,12 +15,11 @@ const VariantSolver = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/variants/${variantId}`);
+            const response = await fetch(`/api/yandex/variants/${variantId}`);
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
                 let errorMsg = 'Не удалось получить вариант';
                 if (errData.detail) {
-                    // Обработка ошибок валидации FastAPI (422)
                     errorMsg = Array.isArray(errData.detail) 
                         ? errData.detail.map(e => e.msg).join(', ') 
                         : errData.detail;
@@ -85,4 +84,4 @@ const VariantSolver = () => {
     );
 };
 
-export default VariantSolver;
+export default YandexVariantSolver;

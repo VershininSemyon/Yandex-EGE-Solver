@@ -2,12 +2,11 @@
 import asyncio
 import logging
 
-from src.database import async_session_factory, init_db
-from src.fetchers import TaskFetcher
+from src.fetchers import YandexTaskFetcher
 from src.http import YandexClient
-from src.parsers import ExamStructureParser, TaskParser
-from src.repositories import JsonTaskRepository, SqlalchemyTaskRepository
-from src.services import TaskLoaderService
+from src.parsers import YandexExamStructureParser, YandexTaskParser
+from src.repositories import JsonYandexTaskRepository
+from src.services import YandexTaskLoaderService
 from src.settings import Config, setup_logging
 
 logger = logging.getLogger(__name__)
@@ -31,17 +30,14 @@ async def main() -> None:
     config = Config()
     setup_logging(config.log_file)
 
-    await init_db()
-    logger.info("База данных инициализирована")
-
     number = get_input_task_number(config)
     client = YandexClient(config)
 
     try:
-        service = TaskLoaderService(
-            TaskFetcher(client, config),
-            ExamStructureParser(),
-            TaskParser(),
+        service = YandexTaskLoaderService(
+            YandexTaskFetcher(client, config),
+            YandexExamStructureParser(),
+            YandexTaskParser(),
             config,
         )
         try:
@@ -51,12 +47,8 @@ async def main() -> None:
             return
 
         path = config.output_file.format(number=number)
-        JsonTaskRepository().save(tasks, path)
+        JsonYandexTaskRepository().save(tasks, path)
         logger.info(f"Сохранено {len(tasks)} заданий в {path}")
-
-        async with async_session_factory() as session:
-            await SqlalchemyTaskRepository(session).save(tasks)
-        logger.info(f"Сохранено {len(tasks)} заданий в базу данных")
 
     finally:
         await client.close()

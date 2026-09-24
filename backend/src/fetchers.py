@@ -8,7 +8,7 @@ from src.settings import (
 )
 
 
-class TaskFetcher:
+class YandexTaskFetcher:
     def __init__(self, client: HttpClient, config: Config) -> None:
         self._client = client
         self._config = config
@@ -63,3 +63,12 @@ class TaskFetcher:
         ]
 
         return await self.gpttr(payload)
+
+
+class KompegeFetcher:
+    def __init__(self, client: HttpClient, config: Config) -> None:
+        self._client = client
+        self._config = config
+
+    async def fetch_variant(self, variant_id: str) -> dict:
+        return await self._client.get(path=f"{self._config.kompege_variants_url}/{variant_id}")

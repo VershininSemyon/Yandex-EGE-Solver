@@ -2,10 +2,10 @@
 import asyncio
 import sys
 
-from src.fetchers import TaskFetcher
+from src.fetchers import YandexTaskFetcher
 from src.http import YandexClient
-from src.parsers import VariantParser
-from src.services import VariantSolverService
+from src.parsers import YandexVariantParser
+from src.services import YandexVariantSolverService
 from src.settings import Config, setup_logging
 
 
@@ -16,10 +16,10 @@ async def main(variant_id: str) -> None:
     client = YandexClient(config)
 
     try:
-        fetcher = TaskFetcher(client, config)
-        parser = VariantParser()
+        fetcher = YandexTaskFetcher(client, config)
+        parser = YandexVariantParser()
 
-        service = VariantSolverService(
+        service = YandexVariantSolverService(
             fetcher=fetcher,
             parser=parser,
         )

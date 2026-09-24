@@ -1,16 +1,17 @@
 
 from dataclasses import dataclass
+from enum import Enum
 
 
 @dataclass(frozen=True, slots=True)
-class ExamTaskInfo:
+class YandexExamTaskInfo:
     number: int
     skill: str
     category_ids: tuple[str]
 
 
 @dataclass(slots=True)
-class TaskItem:
+class YandexTaskItem:
     task_id: str
     exam_number: int
     category: str
@@ -21,14 +22,38 @@ class TaskItem:
 
 
 @dataclass(frozen=True, slots=True)
-class VariantTask:
+class YandexVariantTask:
     number: int
     task_id: str
     answers: tuple[str]
 
 
 @dataclass(frozen=True, slots=True)
-class Variant:
+class YandexVariant:
     variant_id: str
     title: str
-    tasks: tuple[VariantTask]
+    tasks: tuple[YandexVariantTask]
+
+
+class KompegeDifficultyLevelEnum(Enum):
+    EASY = 0
+    MEDIUM = 1
+    HARD = 2
+    GROB = 3
+
+
+@dataclass
+class KompegeTask:
+    system_uuid: str
+    ege_number: int
+    task_id: int
+    comment: str
+    text: str
+    key: str
+    difficulty: KompegeDifficultyLevelEnum
+
+
+@dataclass
+class KompegeVariant:
+    description: str
+    tasks: list[KompegeTask]

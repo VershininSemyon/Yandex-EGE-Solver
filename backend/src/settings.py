@@ -13,6 +13,7 @@ class Config:
     csrf_path: str = "/api/v5/get-csrf-token"
     gpttr_path: str = "/api/v5/gpttr"
     subject_id: str = "ac7328ca-dd3d-4bea-8566-9c3177273a57"
+    kompege_variants_url: str = "https://kompege.ru/api/v1/variant/kim"
 
     min_task_number: int = 1
     max_task_number: int = 27
