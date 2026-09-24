@@ -12,7 +12,6 @@ RUN pip install --no-cache-dir uv
 COPY backend/pyproject.toml backend/uv.lock* ./
 RUN uv sync --frozen --no-install-project --no-dev
 COPY backend/ ./
-COPY .env /app/backend/.env
 RUN uv sync --no-dev
 
 FROM python:3.12-slim
