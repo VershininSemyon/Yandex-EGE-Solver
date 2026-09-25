@@ -778,3 +778,31 @@ body {
         font-size: 0.9rem;
     }
 }
+
+.telegram-bot-warning {
+    padding: 1rem;
+
+    background: rgba(245, 158, 11, 0.1);
+
+    border: 1px solid rgba(245, 158, 11, 0.3);
+
+    border-radius: 8px;
+
+    font-size: 0.9rem;
+}
+
+.telegram-bot-warning strong {
+    display: block;
+
+    margin-bottom: 0.5rem;
+
+    color: #d97706;
+}
+
+.telegram-bot-warning p {
+    margin: 0;
+}
+
+.telegram-bot-warning p + p {
+    margin-top: 0.75rem;
+}

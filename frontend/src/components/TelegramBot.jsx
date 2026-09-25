@@ -33,6 +33,20 @@ function TelegramBot() {
                 </div>
             </div>
 
+            <div className="telegram-bot-warning">
+                <strong>Важно</strong>
+                <p>
+                    Сайт отключается после 15 минут бездействия, поэтому
+                    Telegram-бот останавливается вместе с ним и не будет
+                    отвечать на сообщения.
+                </p>
+                <p>
+                    Чтобы запустить бота, зайдите на сайт, дождитесь его
+                    загрузки, а затем подождите, пока запустится бот.
+                    После этого можно пользоваться ботом.
+                </p>
+            </div>
+
             <a
                 className="telegram-bot-button"
                 href="https://t.me/Yandex_EGE_Inf_Solver_Bot"
